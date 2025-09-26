@@ -10,6 +10,7 @@ public class Main {
         System.out.println("Salir");
 
         System.out.println("Elija una opcion");
+
         String opciones = sc.next();
         String opciones1 = opciones;
         System.out.println("Has elejido la opcion: " + opciones1);
