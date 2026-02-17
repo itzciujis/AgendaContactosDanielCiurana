@@ -1,20 +1,16 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AgendaContactos {
+public class Main {
 
     static Scanner sc = new Scanner(System.in);
-    static String[] nombres = new String[100];
-    static String[] telefonos = new String[100];
-    static int contador = 0;
+    static ArrayList<Contacto> contactos = new ArrayList<>();
 
     public static void main(String[] args) {
-
         int opcion = 0;
-
         while (opcion != 5) {
             mostrarMenu();
             opcion = leerOpcion();
-
             switch (opcion) {
                 case 1 -> anadirContacto();
                 case 2 -> mostrarContactos();
@@ -50,40 +46,36 @@ public class AgendaContactos {
     }
 
     public static void anadirContacto() {
-        if (contador >= 100) {
-            System.out.println("La agenda está llena.");
-            return;
-        }
         System.out.print("Introduce el nombre: ");
-        nombres[contador] = sc.nextLine();
+        String nombre = sc.nextLine();
         System.out.print("Introduce el teléfono: ");
-        telefonos[contador] = sc.nextLine();
-        contador++;
+        String telefono = sc.nextLine();
+        contactos.add(new Contacto(nombre, telefono));
         System.out.println("Contacto añadido correctamente.");
     }
 
     public static void mostrarContactos() {
-        if (contador == 0) {
+        if (contactos.isEmpty()) {
             System.out.println("No hay contactos registrados.");
             return;
         }
         System.out.println("\n--- LISTA DE CONTACTOS ---");
-        for (int i = 0; i < contador; i++) {
-            System.out.println(i + " - " + nombres[i] + " | " + telefonos[i]);
+        for (int i = 0; i < contactos.size(); i++) {
+            System.out.println(i + " - " + contactos.get(i));
         }
     }
 
     public static void buscarContacto() {
-        if (contador == 0) {
+        if (contactos.isEmpty()) {
             System.out.println("No hay contactos registrados.");
             return;
         }
         System.out.print("Introduce el nombre a buscar: ");
         String buscar = sc.nextLine().toLowerCase();
         boolean encontrado = false;
-        for (int i = 0; i < contador; i++) {
-            if (nombres[i].toLowerCase().contains(buscar)) {
-                System.out.println(i + " - " + nombres[i] + " | " + telefonos[i]);
+        for (int i = 0; i < contactos.size(); i++) {
+            if (contactos.get(i).getNombre().toLowerCase().contains(buscar)) {
+                System.out.println(i + " - " + contactos.get(i));
                 encontrado = true;
             }
         }
@@ -93,7 +85,7 @@ public class AgendaContactos {
     }
 
     public static void modificarContacto() {
-        if (contador == 0) {
+        if (contactos.isEmpty()) {
             System.out.println("No hay contactos para modificar.");
             return;
         }
@@ -101,16 +93,17 @@ public class AgendaContactos {
         System.out.print("Introduce el índice del contacto a modificar: ");
         int indice = sc.nextInt();
         sc.nextLine();
-        if (indice >= 0 && indice < contador) {
+        if (indice >= 0 && indice < contactos.size()) {
+            Contacto c = contactos.get(indice);
             System.out.print("Nuevo nombre (ENTER para dejar igual): ");
             String nuevoNombre = sc.nextLine();
             if (!nuevoNombre.isEmpty()) {
-                nombres[indice] = nuevoNombre;
+                c.setNombre(nuevoNombre);
             }
             System.out.print("Nuevo teléfono (ENTER para dejar igual): ");
             String nuevoTelefono = sc.nextLine();
             if (!nuevoTelefono.isEmpty()) {
-                telefonos[indice] = nuevoTelefono;
+                c.setTelefono(nuevoTelefono);
             }
             System.out.println("Contacto modificado correctamente.");
         } else {
